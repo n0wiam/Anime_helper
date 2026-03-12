@@ -1,3 +1,5 @@
+import random
+
 import pymysql
 from anime import Anime
 from pymysql.cursors import DictCursor
@@ -164,6 +166,32 @@ def get_anime_by_ids(ids: list):
     finally:
         conn.close()
 
+
+def get_random_anime(year: int):
+    number_sql = f"""
+SELECT COUNT(1) AS cnt FROM anime WHERE update_time >= NOW() - INTERVAL %s YEAR """
+    conn = pymysql.connect(host='localhost', user='root', password='1234', db='anime_helper', charset='utf8',
+                           cursorclass=DictCursor)
+    anime_list = []
+    limit = 10
+    try :
+        with conn.cursor() as cursor:
+            cursor.execute(number_sql,(year,))
+            result = cursor.fetchone()
+            number = result['cnt'] if result else 0
+            if number <= limit:
+                offset = 0
+            else:
+                offset = random.randint(0, number - limit)
+            sql = f"""
+            SELECT id, name, status, info, total_number, update_time, image_url, link FROM anime
+            WHERE update_time >= NOW() - INTERVAL %s YEAR LIMIT %s,%s"""
+            cursor.execute(sql, (year, offset, limit))
+            rows = cursor.fetchall()
+            anime_list = [Anime(**row) for row in rows]
+            return anime_list
+    finally:
+        conn.close()
 
 
 if __name__ == "__main__":

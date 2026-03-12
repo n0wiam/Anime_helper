@@ -1,7 +1,9 @@
+from service.path_service import get_web_url
 from sql import insert_anime_information
 from anime import Anime
 from informate import *
 from log import logger
+from path_service import get_web_url
 
 
 # link_list = get_all_anime_link()
@@ -32,10 +34,10 @@ def update_anime():
 
 size = get_pages_size()
 for page in range(1, size+1):
-    url = f'https://skr.skr2.cc:666/vodshow/46--------{page}---/'
+    url = get_web_url()+ f'/vodshow/46--------{page}---/'
+    time.sleep(random.uniform(3, 5))
     link_list = get_page_anime_link(url)
     for link in link_list:
-        time.sleep(random.uniform(0.5, 1))
         anime = get_anime_information(link)
         # print(anime)
         try:

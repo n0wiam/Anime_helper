@@ -4,7 +4,7 @@ from playwright.sync_api import sync_playwright
 import subprocess
 import json
 import sys
-from service.path_service import get_video_path, get_ffmpeg_path
+from service.path_service import get_video_path, get_ffmpeg_path, get_web_url
 
 
 def get_anime_episode_link(anime_web, anime_episode):
@@ -56,7 +56,8 @@ def download(anime_web,anime_episode,file_name):
         url = get_anime_episode_link(anime_web, int(anime_episode))
         if url is None:
             return {"success": False,"error": "unfound anime link!"}
-        anime_link = "https://skr.skr2.cc:666"+url
+        # anime_link = "https://skr.skr2.cc:666"+url
+        anime_link = get_web_url() + url
         # print(anime_link)
         download_video(anime_link,file_name)
         return {"success": True}

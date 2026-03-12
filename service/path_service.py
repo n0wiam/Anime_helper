@@ -17,5 +17,8 @@ def get_ffmpeg_path():
     ffmpeg_path = project_root / "ffmpeg/bin/ffmpeg.exe"
     return str(ffmpeg_path)
 
+def get_web_url():
+    return "https://skr.skr2.cc:666"
+
 if __name__ == '__main__':
     print(get_video_path())

@@ -5,7 +5,7 @@ from lxml import etree
 import time
 import random
 from anime import Anime
-
+from service.path_service import get_web_url
 
 
 # TODO 爬取全部番剧
@@ -15,7 +15,8 @@ from anime import Anime
 #获取总页数
 def get_pages_size():
     try:
-        url = 'https://skr.skr2.cc:666/vodshow/46-----------/'
+        # url = 'https://skr.skr2.cc:666/vodshow/46-----------/'
+        url = get_web_url()+'/vodshow/46-----------/'
         # url = 'https://skr.skr2.cc:666/vodshow/46--------70---/'
         data = requests.get(url).text
         tree = etree.HTML(data)
@@ -41,8 +42,10 @@ def get_all_anime_link():
             time.sleep(random.uniform(0.5, 1))
 
             # 爬取每个分页所展示的链接，加入到列表中
-            url = f'https://skr.skr2.cc:666/vodshow/46--------{page}---/'
-            prefix_url = 'https://skr.skr2.cc:666'
+            # url = f'https://skr.skr2.cc:666/vodshow/46--------{page}---/'
+            url = get_web_url()+f'/vodshow/46--------{page}---/'
+            # prefix_url = 'https://skr.skr2.cc:666'
+            prefix_url = get_web_url()
             data = requests.get(url).text
             tree = etree.HTML(data)
             content = tree.xpath('//*[@id="show_page"]/div[2]/div/div[2]/ul[1]/li')
@@ -57,7 +60,8 @@ def get_page_anime_link(url):
     link_list = []
     try:
         # 爬取分页所展示的链接，加入到列表中
-        prefix_url = 'https://skr.skr2.cc:666'
+        # prefix_url = 'https://skr.skr2.cc:666'
+        prefix_url = get_web_url()
         data = requests.get(url).text
         tree = etree.HTML(data)
         content = tree.xpath('//*[@id="show_page"]/div[2]/div/div[2]/ul[1]/li')
@@ -125,14 +129,14 @@ def get_anime_information(url):
         return None
 
 
-def download_image(url,image_name):
-    try:
-        target_path = 'C:/Afolder/项目/AnimeHelper/pic/' + image_name
-        response = requests.get(url)
-        with open(target_path, 'wb') as f:
-            f.write(response.content)
-    except Exception as e:
-        logger.error("[下载番剧图片异常]：%s",e, exc_info=True)
+# def download_image(url,image_name):
+#     try:
+#         target_path = 'C:/Afolder/项目/AnimeHelper/pic/' + image_name
+#         response = requests.get(url)
+#         with open(target_path, 'wb') as f:
+#             f.write(response.content)
+#     except Exception as e:
+#         logger.error("[下载番剧图片异常]：%s",e, exc_info=True)
 
 # log_name = log_filename = datetime.now().strftime("%Y_%m_%d") + ".log"
 # logging.basicConfig(
@@ -142,7 +146,7 @@ def download_image(url,image_name):
 # )
 
 def get_weekly_list():
-    data = requests.get("https://skr.skr2.cc:666/vodtype/22/").text
+    data = requests.get(get_web_url()+"/vodtype/22/").text
     tree = etree.HTML(data)
     days = tree.xpath('//*[@id="day1"]/div[2]/div/div/div[@class="vodlist_smt clearfix"]')
     result = []
