@@ -12,6 +12,7 @@ from fastapi.staticfiles import StaticFiles
 from service.subscribe_service import subscribe_anime as subscribe
 from service.subscribe_service import unsubscribe_anime as unsubscribe
 from service.subscribe_service import get_anime_subscribe
+from service.ai_service import get_ai_anime_recommendation
 from log import logger
 
 app = FastAPI()
@@ -158,6 +159,27 @@ def get_anime_follow(request: Request):
             "subscriptions": result
         }
     )
+
+@app.get("/anime/recommendation/{year}")
+def get_anime_recommendation(year: int):
+    if (year == 1) or (year == 10):
+        res = get_ai_anime_recommendation(year)
+        result = [
+            {
+                "id": u.id,
+                "name": u.name,
+                "status": u.status,
+                "info": u.info,
+                "total_number": u.total_number,
+                "update_time": u.update_time,
+                "image_url": u.image_url,
+                "link": u.link,
+            }
+            for u in res
+        ]
+        return result
+    else :
+        return {"status": "error", "msg": "时间范围暂时不支持"}
 
 # @app.on_event("startup")
 # async def start_scheduler():
