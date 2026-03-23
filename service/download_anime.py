@@ -24,20 +24,30 @@ def download_video(anime_link,file_name):
     captured_urls = []
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True)
-        page = browser.new_page()
+        context = browser.new_context(ignore_https_errors=True)
+        page = context.new_page()
 
         def on_request(request):
             url = request.url
             if any(k in url for k in target_keywords):
+                print("捕获到:", url)
                 captured_urls.append(url)
 
         page.on("request", on_request)
 
-        page.goto(anime_link)
-
-        page.wait_for_timeout(2000)
+        # page.goto(anime_link)
+        #
+        # page.wait_for_timeout(2000)
+        try:
+            page.goto(anime_link, wait_until="domcontentloaded", timeout=60000)
+            page.wait_for_timeout(10000)  # 多等几秒，给播放器发请求的时间
+        except Exception as e:
+            browser.close()
+            raise Exception(f"页面访问失败: {e}")
 
         browser.close()
+        if len(captured_urls)<2:
+            raise Exception("没有捕获到 m3u8 请求，可能是页面未触发播放请求，或站点有反爬，亦或者超时")
 
     # print(captured_urls[1])
     # ffmpeg_path = r"C:/Afolder/software/ffmpeg/ffmpeg-8.0.1-essentials_build/bin/ffmpeg.exe"
@@ -74,9 +84,9 @@ if __name__ == "__main__":
     # x = sys.argv[1]
     # y = sys.argv[2]
     # z = sys.argv[3]
-    x="https://skr.skr2.cc:666/voddetail/12425/"
-    y=1
-    z="test1"
+    x="https://skr.skr2.cc:666/voddetail/265196/"
+    y=9
+    z="芙莉莲"
 
     output = download(x,y,z)
     print(json.dumps(output, ensure_ascii=False))
