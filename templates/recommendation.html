@@ -2,9 +2,8 @@
 <html lang="zh">
 <head>
     <meta charset="UTF-8">
-    <title>动漫搜索</title>
+    <title>番剧推荐</title>
 
-    <!-- ✅ 防止浏览器请求 /favicon.ico -->
     <link rel="icon" href="data:,">
 
     <style>
@@ -17,10 +16,7 @@
             --border: #e5e7eb;
         }
 
-        * {
-            box-sizing: border-box;
-        }
-
+        * { box-sizing: border-box; }
         body {
             margin: 0;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
@@ -41,45 +37,7 @@
             font-weight: 600;
         }
 
-        /* 搜索栏 */
-        .search-bar {
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-            margin-bottom: 40px;
-        }
-
-        .search-bar input {
-            width: 420px;
-            height: 46px;
-            padding: 0 16px;
-            font-size: 16px;
-            border-radius: 10px;
-            border: 1px solid var(--border);
-            outline: none;
-        }
-
-        .search-bar input:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(79, 140, 255, 0.15);
-        }
-
-        .search-bar button {
-            height: 46px;
-            padding: 0 26px;
-            border-radius: 10px;
-            border: none;
-            background: var(--primary);
-            color: #fff;
-            font-size: 16px;
-            cursor: pointer;
-        }
-
-        .search-bar button:hover {
-            background: #3b79e0;
-        }
-
-        /* 卡片 */
+        /* 卡片网格 */
         .anime-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
@@ -109,26 +67,20 @@
         }
 
         .anime-name {
-            margin-top: 10px;
+            margin-top: 6px;
             font-size: 15px;
             font-weight: 500;
         }
 
-        /* 分页 */
-        .pagination {
-            margin-top: 40px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 16px;
+        .watch-info {
+            margin-top: 4px;
+            font-size: 13px;
+            color: var(--text-sub);
         }
-
-        .pagination button {
-            padding: 8px 18px;
-            border-radius: 8px;
-            border: 1px solid var(--border);
-            background: #fff;
-            cursor: pointer;
+        .empty {
+            text-align: center;
+            color: var(--text-sub);
+            margin-top: 60px;
         }
 
         /* 弹窗 */
@@ -151,6 +103,12 @@
             position: relative;
         }
 
+        .modal-large {
+            width: 760px;
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+
         .close-btn {
             position: absolute;
             right: 16px;
@@ -158,18 +116,6 @@
             font-size: 22px;
             cursor: pointer;
             color: #999;
-        }
-
-        .empty {
-            text-align: center;
-            color: var(--text-sub);
-            margin-top: 60px;
-        }
-
-        .modal-large {
-            width: 760px;
-            max-height: 85vh;
-            overflow-y: auto;
         }
 
         .modal-header {
@@ -195,31 +141,73 @@
             line-height: 1.6;
         }
 
-        .download-title {
-            margin: 20px 0 10px;
+        .modal-info p {
+            margin: 4px 0;
         }
 
+        .modal-info button {
+            margin-top: 10px;
+            padding: 10px 22px;
+            border-radius: 12px;
+            border: none;
+            background: #4f8cff;
+            color: #fff;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.2s;
+        }
+
+        .modal-info button:hover {
+            background: #3b79e0;
+            transform: translateY(-2px);
+        }
+
+        /* 下载集数按钮 */
         .episode-list {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
             gap: 10px;
+            margin-top: 20px;
         }
 
-        .episode-list button {
-            padding: 8px 0;
-            border-radius: 8px;
-            border: 1px solid var(--border);
-            background: #fff;
-            cursor: pointer;
-            transition: background .2s, color .2s;
-        }
+.episode-list button {
+    padding: 8px 0;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: #fff;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background 0.2s, color 0.2s, transform 0.2s;
+}
 
-        .episode-list button:hover {
-            background: var(--primary);
-            color: #fff;
-        }
-        /* ========== 订阅按钮美化 ========== */
-.sub-btn {
+.episode-list button:hover {
+    background: var(--primary);
+    color: #fff;
+    transform: translateY(-2px);
+}
+
+.unsub-btn {
+    display: inline-block;
+    padding: 12px 28px;
+    border-radius: 12px;
+    border: none;
+    background: #ff4c4c;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.25s, transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.unsub-btn:hover {
+    background: #ff1c1c;
+    transform: translateY(-2px);
+}
+/* ========== 订阅按钮美化 ========== */
+.modal-info .sub-btn {
     display: inline-block;
     padding: 12px 28px;
     border-radius: 12px;
@@ -233,63 +221,15 @@
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
-.sub-btn:hover {
+.modal-info .sub-btn:hover {
     background: #ff4c4c;
     transform: translateY(-2px);
 }
 
-.sub-btn:disabled {
+.modal-info .sub-btn:disabled {
     background: #ccc;
     cursor: not-allowed;
     box-shadow: none;
-}
-
-/* ========== 订阅弹窗美化 ========== */
-#sub-modal .modal-content {
-    width: 500px;
-    max-width: 90%;
-    padding: 30px 28px;
-    border-radius: 16px;
-    background: #fff;
-    box-shadow: 0 16px 40px rgba(0,0,0,0.25);
-    text-align: center;
-}
-
-#sub-modal h3 {
-    font-size: 24px;
-    margin-bottom: 20px;
-    color: #333;
-}
-
-#sub-modal input {
-    width: 100%;
-    padding: 12px 16px;
-    font-size: 16px;
-    border-radius: 10px;
-    border: 1px solid #ddd;
-    margin-top: 8px;
-    margin-bottom: 16px;
-    outline: none;
-    transition: border-color 0.2s, box-shadow 0.2s;
-}
-
-#sub-modal input:focus {
-    border-color: #ff6b6b;
-    box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.15);
-}
-
-/* 弹窗关闭按钮 */
-#sub-modal .close-btn {
-    right: 20px;
-    top: 16px;
-    font-size: 26px;
-    color: #999;
-    cursor: pointer;
-    transition: color 0.2s;
-}
-
-#sub-modal .close-btn:hover {
-    color: #ff6b6b;
 }
 
     </style>
@@ -297,60 +237,59 @@
 
 <body>
 <div class="nav-bar" style="text-align: right; margin-bottom: 20px;">
+    <button class="sub-btn" onclick="window.location.href='/anime'">
+        动漫搜索
+    </button>
     <button class="sub-btn" onclick="window.location.href='/anime/subscriptions'">
         我的订阅
     </button>
-    <button class="sub-btn" onclick="window.location.href='/anime/recommendation/1'">
-        智能推荐
-    </button>
 </div>
-
 <div class="container">
-    <h2>动漫搜索</h2>
+    <h2>番剧推荐</h2>
 
-    <div class="search-bar">
-        <input
-                type="text"
-                id="keyword"
-                placeholder="请输入动漫名称"
-                value="{{ keyword | default('') }}"
-        >
-        <button onclick="searchAnime(1)">搜索</button>
-    </div>
-
-    {% if animes %}
+    {% if recommendations %}
     <div class="anime-grid">
-        {% for anime in animes %}
+        {% for anime in recommendations %}
         <div class="anime-card"
              onclick="showDetail(
                 '{{ anime.id }}',
                 '{{ anime.name }}',
                 '{{ anime.status }}',
-                '{{ anime.total_number }}',
                 '{{ anime.info }}',
-                '{{ anime.image_url }}'
+                '{{ anime.total_number }}',
+                '{{ anime.update_time }}',
+                '{{ anime.image_url }}',
+                '{{ anime.link }}'
              )">
             <img src="{{ anime.image_url }}" referrerpolicy="no-referrer">
             <div class="anime-name">{{ anime.name }}</div>
         </div>
         {% endfor %}
     </div>
-    {% elif keyword %}
-    <div class="empty">没有搜索到相关动漫</div>
-    {% endif %}
-
-    {% if animes %}
-    <div class="pagination">
-        {% if page > 1 %}
-        <button onclick="searchAnime({{ page - 1 }})">上一页</button>
-        {% endif %}
-        <span>第 {{ page }} 页</span>
-        <button onclick="searchAnime({{ page + 1 }})">下一页</button>
-    </div>
+    {% else %}
+    <div class="empty">还没有动漫为你推荐</div>
     {% endif %}
 </div>
 
 <!-- 弹窗 -->
+<!--<div id="modal" class="modal" onclick="closeModal()">-->
+<!--    <div class="modal-content modal-large" onclick="event.stopPropagation()">-->
+<!--        <span class="close-btn" onclick="closeModal()">×</span>-->
+<!--        <div class="modal-header">-->
+<!--            <img id="m-img">-->
+<!--            <div class="modal-info">-->
+<!--                <h3 id="m-name"></h3>-->
+<!--                <p>已观看：<span id="m-watch"></span> / <span id="m-total"></span></p>-->
+<!--                <p>更新时间：<span id="m-update"></span></p>-->
+<!--                <button onclick="openUserLink()">打开播放页面</button>-->
+<!--                <button class="sub-btn unsub-btn" onclick="unsubscribeAnime(currentAnimeId)">取消订阅</button>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <p id="m-info" class="modal-desc"></p>-->
+<!--        <h4 class="download-title">选择下载集数</h4>-->
+<!--        <div id="episode-list" class="episode-list"></div>-->
+<!--    </div>-->
+<!--</div>-->
 <div id="modal" class="modal" onclick="closeModal()">
     <div class="modal-content modal-large" onclick="event.stopPropagation()">
         <span class="close-btn" onclick="closeModal()">×</span>
@@ -396,50 +335,36 @@
 
 <script>
 let currentAnimeId = null;
+let currentUserLink = "";
 
-window.searchAnime = async function (page = 1) {
-    const keyword = document.getElementById("keyword").value.trim();
-    if (!keyword) {
-        alert("请输入动漫名称");
-        return;
-    }
-
-    const res = await fetch("/anime/search", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: keyword, number: page })
-    });
-
-    const html = await res.text();
-    document.open();
-    document.write(html);
-    document.close();
-};
-
-window.showDetail = function (id, name, status, total, info, img) {
+// 点击卡片显示详情
+function showDetail(id, name, status, info, total, update, img, link) {
     currentAnimeId = id;
+    currentUserLink = link;
 
     document.getElementById("m-name").innerText = name;
     document.getElementById("m-status").innerText = status;
-    document.getElementById("m-total").innerText = total;
     document.getElementById("m-info").innerText = info;
+    document.getElementById("m-total").innerText = total;
+//    document.getElementById("m-update").innerText = update;
     document.getElementById("m-img").src = img;
 
-    // 生成集数按钮
+    // 生成下载集数按钮
     const list = document.getElementById("episode-list");
     list.innerHTML = "";
-
     for (let i = 1; i <= total; i++) {
         const btn = document.createElement("button");
+        btn.innerText = i;  // 直接显示集数
         btn.innerText = `第 ${i} 集`;
         btn.onclick = () => downloadEpisode(i);
         list.appendChild(btn);
     }
 
     document.getElementById("modal").style.display = "flex";
-};
+}
 
-window.downloadEpisode = function (episode) {
+// 下载集数
+function downloadEpisode(episode) {
     fetch("/download", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -449,14 +374,43 @@ window.downloadEpisode = function (episode) {
         })
     });
 
-    // 立即反馈，不等后端
     alert(`已提交第 ${episode} 集下载任务`);
-};
+}
 
-window.closeModal = function () {
+// 关闭弹窗
+function closeModal() {
     document.getElementById("modal").style.display = "none";
+}
+
+// 打开用户播放链接
+function openUserLink() {
+    if (currentUserLink) {
+        window.open(currentUserLink, "_blank");
+    } else {
+        alert("未提供播放链接");
+    }
+}
+    //取消订阅
+    window.unsubscribeAnime = function(animeId) {
+    if (!animeId) return;
+    if (!confirm("确定要取消订阅吗？")) return;
+
+    fetch(`/anime/unsub/${animeId}`, { method: "GET" })
+  .then(res => {
+      if (!res.ok) throw new Error("网络异常");
+      return res.json();
+  })
+  .then(data => {
+      if (data.status === "success") {
+          alert("已取消订阅 🎉");
+          closeModal();
+          window.location.reload(); // 刷新页面
+      } else {
+          alert(data.msg || "取消订阅失败");
+      }
+  })
+  .catch(err => alert(err.message));
 };
-    // 订阅动漫
 window.openSubModal = function () {
     document.getElementById("sub-modal").style.display = "flex";
 };
@@ -464,7 +418,6 @@ window.openSubModal = function () {
 window.closeSubModal = function () {
     document.getElementById("sub-modal").style.display = "none";
 };
-
 window.submitSubscribe = function () {
     const watch = document.getElementById("sub-watch").value;
     const link = document.getElementById("sub-link").value.trim();
@@ -495,7 +448,5 @@ window.submitSubscribe = function () {
     .catch(() => alert("网络异常"));
 };
 </script>
-
-
 </body>
 </html>

@@ -161,7 +161,7 @@ def get_anime_follow(request: Request):
     )
 
 @app.get("/anime/recommendation/{year}")
-def get_anime_recommendation(year: int):
+def get_anime_recommendation(request: Request,year: int):
     if (year == 1) or (year == 10):
         res = get_ai_anime_recommendation(year)
         result = [
@@ -177,7 +177,13 @@ def get_anime_recommendation(year: int):
             }
             for u in res
         ]
-        return result
+        return templates.TemplateResponse(
+            "recommendation.html",
+            {
+                "request": request,
+                "recommendations": result
+            }
+        )
     else :
         return {"status": "error", "msg": "时间范围暂时不支持"}
 

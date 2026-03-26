@@ -84,9 +84,9 @@ if __name__ == "__main__":
     # x = sys.argv[1]
     # y = sys.argv[2]
     # z = sys.argv[3]
-    x="https://skr.skr2.cc:666/voddetail/265196/"
-    y=9
-    z="芙莉莲"
+    x="https://skr.skr2.cc:666/voddetail/264884/"
+    y=11
+    z="我推"
 
     output = download(x,y,z)
     print(json.dumps(output, ensure_ascii=False))
