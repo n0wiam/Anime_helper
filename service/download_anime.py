@@ -20,7 +20,6 @@ def get_anime_episode_link(anime_web, anime_episode):
     return link
 
 def download_video(anime_link,file_name):
-    target_keywords = ["m3u8"]
     captured_urls = []
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True)
@@ -29,7 +28,7 @@ def download_video(anime_link,file_name):
 
         def on_request(request):
             url = request.url
-            if any(k in url for k in target_keywords):
+            if url.endswith('.m3u8'):
                 print("捕获到:", url)
                 captured_urls.append(url)
 
@@ -46,19 +45,19 @@ def download_video(anime_link,file_name):
             raise Exception(f"页面访问失败: {e}")
 
         browser.close()
-        if len(captured_urls)<2:
+        if len(captured_urls)<1:
             raise Exception("没有捕获到 m3u8 请求，可能是页面未触发播放请求，或站点有反爬，亦或者超时")
 
     # print(captured_urls[1])
     # ffmpeg_path = r"C:/Afolder/software/ffmpeg/ffmpeg-8.0.1-essentials_build/bin/ffmpeg.exe"
     ffmpeg_path = get_ffmpeg_path()
-    m3u8_url = captured_urls[1]
+    m3u8_url = captured_urls[len(captured_urls)-1]
     output = get_video_path()+"/"+file_name+".mp4"
     subprocess.run(
         [ffmpeg_path, "-n", "-i", m3u8_url, "-c", "copy", output],
-        check=True,
+        stderr=subprocess.DEVNULL,
         stdout=subprocess.DEVNULL,
-        stderr=subprocess.DEVNULL
+        check=True,
     )
 
 def download(anime_web,anime_episode,file_name):
@@ -84,9 +83,14 @@ if __name__ == "__main__":
     # x = sys.argv[1]
     # y = sys.argv[2]
     # z = sys.argv[3]
-    x="https://skr.skr2.cc:666/voddetail/264884/"
-    y=11
-    z="我推"
+
+    x="https://skr.skr2.cc:666/voddetail/216908/"
+    y=1
+    z="异界"
 
     output = download(x,y,z)
     print(json.dumps(output, ensure_ascii=False))
+
+    # x = "https://bgm.girigirilove.com/playGV27025-1-1/"
+    # y = "和班上"
+    # download_video(x,y)

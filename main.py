@@ -8,7 +8,6 @@ from service.download_anime import download
 import asyncio
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from fastapi.templating import Jinja2Templates
-from fastapi.staticfiles import StaticFiles
 from service.subscribe_service import subscribe_anime as subscribe
 from service.subscribe_service import unsubscribe_anime as unsubscribe
 from service.subscribe_service import get_anime_subscribe
@@ -17,7 +16,6 @@ from log import logger
 
 app = FastAPI()
 scheduler = AsyncIOScheduler()
-app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 # class AnimeVO(BaseModel):
 #     id : int
