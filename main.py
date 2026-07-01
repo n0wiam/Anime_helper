@@ -57,9 +57,9 @@ def get_anime(request: Request,query_dto: QueryDTO):
         for u in res
     ]
     return templates.TemplateResponse(
-        "anime.html",
-        {
-            "request": request,
+        request=request,
+        name="anime.html",
+        context={
             "animes": result,
             "keyword": query_dto.name,
             "page": query_dto.number
@@ -102,9 +102,9 @@ def get_anime_page(number: int):
 @app.get("/anime")
 def anime_page(request: Request):
     return templates.TemplateResponse(
-        "anime.html",
-        {
-            "request": request,
+        request=request,
+        name="anime.html",
+        context={
             "animes": [],
             "keyword": "",
             "page": 1
@@ -151,9 +151,9 @@ def get_anime_follow(request: Request):
         for u in res
     ]
     return templates.TemplateResponse(
-        "subscriptions.html",
-        {
-            "request": request,
+        request=request,
+        name="subscriptions.html",
+        context={
             "subscriptions": result
         }
     )
@@ -176,9 +176,9 @@ def get_anime_recommendation(request: Request,year: int):
             for u in res
         ]
         return templates.TemplateResponse(
-            "recommendation.html",
-            {
-                "request": request,
+            request=request,
+            name="recommendation.html",
+            context={
                 "recommendations": result
             }
         )
